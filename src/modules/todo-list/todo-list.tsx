@@ -1,34 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-
-type Todo = {
-	id: string;
-	text: string;
-	done: boolean;
-};
-
-export const getTasks = () => {
-	return new Promise<Todo[]>(res => {
-		setTimeout(() => {
-			res([
-				{
-					id: '1',
-					text: 'todo',
-					done: false,
-				},
-				{
-					id: '2',
-					text: 'todo',
-					done: false,
-				},
-			]);
-		}, 1000);
-	});
-};
+import { todoListApi } from './api';
 
 export function TodoList() {
 	const { data, error, isPending } = useQuery({
 		queryKey: ['tasks', 'list'],
-		queryFn: getTasks,
+		queryFn: todoListApi.getTodoList,
 	});
 
 	if (isPending) {
@@ -40,11 +16,13 @@ export function TodoList() {
 	}
 
 	return (
-		<div>
-			Todo List
-			{data.map(todo => (
-				<div key={todo.id}> {todo.text} </div>
-			))}
+		<div className='p-5 mx-auto max-w-[1200px] mt-10'>
+			<h1 className='text-3xl font-bold underline mb-5'>TodoList</h1>
+			<div className='flex flex-col gap-4'>
+				{data.map(todo => (
+					<div className='border border-slate-300 rounded p-3' key={todo.id}> {todo.text} </div>
+				))}
+			</div>
 		</div>
 	);
 }
