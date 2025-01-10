@@ -27,6 +27,7 @@ export function useDeleteTodo() {
 
 	return {
 		handleDelete: deleteTodoMutation.mutate,
-		isPending: deleteTodoMutation.isPending,
+		getIsPending: (id: string) =>
+			deleteTodoMutation.isPending && deleteTodoMutation.variables === id,
 	};
 }

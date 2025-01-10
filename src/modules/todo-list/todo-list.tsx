@@ -41,7 +41,7 @@ export function TodoList() {
 						{todo.text}
 
 						<button
-							disabled={deleteTodo.isPending}
+							disabled={deleteTodo.getIsPending(todo.id)}
 							onClick={() => deleteTodo.handleDelete(todo.id)}
 							className='text-rose-500 font-bold disabled:text-rose-300'
 						>
