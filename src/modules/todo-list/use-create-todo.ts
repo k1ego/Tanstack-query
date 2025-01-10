@@ -2,20 +2,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
 import { todoListApi } from './api';
 export function useCreateTodo() {
-
 	const queryClient = useQueryClient();
 
 	const createTodoMutation = useMutation({
 		mutationFn: todoListApi.createTodo,
 		async onSettled() {
-			await queryClient.invalidateQueries(
-				todoListApi.getTodoListQueryOptions()
-			);
+			await queryClient.invalidateQueries({ queryKey: [todoListApi.baseKey] });
 		},
 	});
 
 	const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
-		
 		// предотвращает дефолтную перезагрузку страницу при отправке формы
 		e.preventDefault();
 
