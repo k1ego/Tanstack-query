@@ -1,7 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { jsonApiInstance } from '../../shared/api/api-instance';
 
-const BASE_URL = 'http://localhost:3000';
 
 export type PaginatedResult<T> = {
 	data: T[];
@@ -61,7 +60,7 @@ export const todoListApi = {
 	},
 	deleteTodo: (id: string) => {
 		return jsonApiInstance(`/tasks/${id}`, {
-			method: 'DELTE',
+			method: 'DELETE',
 		});
 	},
 };
