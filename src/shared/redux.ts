@@ -15,7 +15,7 @@ export type AppDispatch = typeof store.dispatch;
 export type AppThunk<R = void> = ThunkAction<
 	R,
 	AppState,
-	{},
+	any,
 	UnknownAction
 >;
 export const store = configureStore({
