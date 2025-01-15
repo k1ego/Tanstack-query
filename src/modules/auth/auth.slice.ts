@@ -17,7 +17,7 @@ export const authSlice = createSlice({
 			state.userId = action.payload.userId;
 			state.loginError = undefined;
 		},
-		removeUser(state, action: PayloadAction<{ userId: string }>) {
+		removeUser(state) {
 			state.userId = null;
 		},
 		setError(state, action: PayloadAction<string | undefined>) {

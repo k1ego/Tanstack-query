@@ -1,4 +1,5 @@
 import { Login } from '../modules/auth/login';
+import { LogoutButton } from '../modules/auth/logout-button';
 import { useUser } from '../modules/auth/use-user';
 import { TodoList } from '../modules/todo-list/todo-list';
 
@@ -10,7 +11,12 @@ export function App() {
 	}
 
 	if (user.data) {
-		return <TodoList />;
+		return (
+			<>
+				<LogoutButton />
+				<TodoList />;
+			</>
+		);
 	}
 
 	return <Login />;
