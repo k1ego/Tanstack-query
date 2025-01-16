@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSuspenseUser } from '../auth/use-user';
 import { todoListApi } from './api';
 export function useToggleTodo() {
+	const user = useSuspenseUser();
 	const queryClient = useQueryClient();
 
 	const updateTodoMutation = useMutation({
@@ -13,12 +15,12 @@ export function useToggleTodo() {
 
 			// получаем данные из кеша и сохраняем текущий список задач для отката в случае ошибки
 			const previousTodos = queryClient.getQueryData(
-				todoListApi.getTodoListQueryOptions().queryKey
+				todoListApi.getTodoListQueryOptions({ userId: user.data.id }).queryKey
 			);
 
 			// получаем с этим новое значение в кеш - оптимистичное обновление
 			queryClient.setQueryData(
-				todoListApi.getTodoListQueryOptions().queryKey,
+				todoListApi.getTodoListQueryOptions({ userId: user.data.id }).queryKey,
 				old =>
 					old?.map(todo =>
 						todo.id === newTodo.id ? { ...todo, ...newTodo } : todo
@@ -33,7 +35,8 @@ export function useToggleTodo() {
 		onError: (_, __, context) => {
 			if (context) {
 				queryClient.setQueryData(
-					todoListApi.getTodoListQueryOptions().queryKey,
+					todoListApi.getTodoListQueryOptions({ userId: user.data.id })
+						.queryKey,
 					context.previousTodos
 				);
 			}
