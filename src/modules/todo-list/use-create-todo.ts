@@ -1,17 +1,13 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { nanoid } from 'nanoid';
-import { todoListApi } from './api';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAppDispath } from '../../shared/redux';
+import { createTodoThunk, useCreateLoading } from './create-todo-thunk';
 export function useCreateTodo() {
+	const appDispatch = useAppDispath();
+	const isLoading = useCreateLoading();
+
 	const queryClient = useQueryClient();
 
-	const createTodoMutation = useMutation({
-		mutationFn: todoListApi.createTodo,
-		async onSettled() {
-			await queryClient.invalidateQueries({ queryKey: [todoListApi.baseKey] });
-		},
-	});
-
-	const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
 		// предотвращает дефолтную перезагрузку страницу при отправке формы
 		e.preventDefault();
 
@@ -21,19 +17,13 @@ export function useCreateTodo() {
 		// извлекает значение поля с атрибутом name="text"
 		const text = String(formData.get('text') ?? '');
 
-		// метод для запуска мутаций
-		createTodoMutation.mutate({
-			id: nanoid(),
-			done: false,
-			text: text,
-			userId: '1',
-		});
+		appDispatch(createTodoThunk(text));
 
 		// очищает все поля формы после успешной отправки
 		e.currentTarget.reset();
 	};
 	return {
 		handleCreate,
-		isPending: createTodoMutation.isPending,
+		isLoading,
 	};
 }
