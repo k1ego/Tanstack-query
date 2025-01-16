@@ -1,4 +1,5 @@
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { onlineManager } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { StrictMode } from 'react';
@@ -8,10 +9,10 @@ import { queryClient } from '../shared/api/query-client';
 import { store } from '../shared/redux';
 import { App } from './app';
 import './index.css';
-import { onlineManager } from '@tanstack/react-query';
+import { Loader } from './loader';
 
 // позволяет React Query автоматически реагировать на изменения сетевого статуса (онлайн/оффлайн) и соответствующим образом управлять запросами
-onlineManager.setOnline(navigator.onLine)
+onlineManager.setOnline(navigator.onLine);
 
 const persister = createSyncStoragePersister({
 	storage: window.localStorage,
@@ -30,7 +31,9 @@ createRoot(document.getElementById('root')!).render(
 			}}
 		>
 			<Provider store={store}>
-				<App />
+				<Loader>
+					<App />
+				</Loader>
 			</Provider>
 			<ReactQueryDevtools initialIsOpen={false} />
 		</PersistQueryClientProvider>
